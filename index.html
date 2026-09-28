@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Módulos e Treinamentos</title>
+<link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1Z8rx8IRvvCghJJpPZZtX_62PendejCt1">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            color: #0f1e3c;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Grid Responsiva para os Cards */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* Estilo do Card */
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-top: 4px solid #0066cc;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-number {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #0066cc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            color: #0f1e3c;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        /* Botão de Acesso */
+        .btn-access {
+            display: inline-block;
+            text-align: center;
+            background-color: #0f1e3c;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-access:hover {
+            background-color: #0066cc;
+        }
+
+        /* Modificadores de cor para variados módulos */
+        .card.accent-gold { border-top-color: #d4af37; }
+        .card.accent-green { border-top-color: #2e7559; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Portal de Acesso aos Módulos</h1>
+            <p>Selecione abaixo o módulo ou treinamento que deseja acessar:</p>
+        </header>
+
+        <div class="modules-grid">
+            
+            <!-- Módulo 1 -->
+            <div class="card">
+                <div>
+                    <span class="card-number">Módulo 01</span>
+                    <h2>Apresentação e Visão Geral</h2>
+                    <p>Introdução ao projeto, regras gerais, alinhamento de expectativas e objetivos.</p>
+                </div>
+                <a href="modulo01.html" target="_blank" class="btn-access">Acessar Módulo</a>
+            </div>
+
+            <!-- Módulo 2 -->
+            <div class="card">
+                <div>
+                    <span class="card-number">Módulo 02</span>
+                    <h2>Processo Comercial & Vendas</h2>
+                    <p>Estratégias de abordagem, diagnóstico do cliente, apresentação de propostas e fechamento.</p>
+                </div>
+                <a href="modulo02.html" target="_blank" class="btn-access">Acessar Módulo</a>
+            </div>
+
+            <!-- Módulo 3 -->
+            <div class="card">
+                <div>
+                    <span class="card-number">Módulo 03</span>
+                    <h2>Planilhas e Simuladores</h2>
+                    <p>Acesso às simulações financeiras, tabelas comparativas e calculadoras de taxas.</p>
+                </div>
+                <a href="modulo03.html" target="_blank" class="btn-access">Acessar Módulo</a>
+            </div>
+
+  <!-- Módulo 4 -->
+            <div class="card">
+                <div>
+                    <span class="card-number">Módulo 04</span>
+                    <h2>Diretrizes e Compliance</h2>
+                    <p>Atuação Ética, Transparente e Regulada.</p>
+                </div>
+                <a href="modulo04.html" target="_blank" class="btn-access">Acessar Módulo</a>
+            </div>
+
+            <!-- Adicione novos cards duplicando a estrutura acima -->
+
+        </div>
+    </div>
+
+</body>
+</html>
