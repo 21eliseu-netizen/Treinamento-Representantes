@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regras Comerciais e Compliance | Ferraz Consórcios</title>
+  
+  <!-- Tipografia Oficial da Marca -->
+  <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1Z8rx8IRvvCghJJpPZZtX_62PendejCt1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* VARIABLES & BRAND SYSTEM (Manual de Marca Ferraz Consórcios) */
+    :root {
+      --azul-confianca: #001A4B;
+      --azul-progresso: #314B87;
+      --laranja-expansao: #C65C31;
+      --horizonte: #344469;
+      --tradicao: #3D6DA7;
+      --equilibrio: #D8D8D8;
+      --paz: #FFFFFF;
+      --fundo-suave: #F4F6F9;
+      --vermelho-alerta: #D9534F;
+      --verde-sucesso: #2E7D32;
+      
+      --fonte-titulo: 'Poppins', sans-serif;
+      --fonte-corpo: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--fonte-corpo);
+      background-color: var(--fundo-suave);
+      color: var(--azul-confianca);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* SIDEBAR NAVIGATION */
+    #sidebar {
+      width: 320px;
+      background-color: var(--azul-confianca);
+      color: var(--paz);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+      z-index: 100;
+      box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+      padding: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      flex-shrink: 0;
+    }
+
+    .sidebar-header img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .brand-logo {
+      font-family: var(--fonte-titulo);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--paz);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo span {
+      color: var(--laranja-expansao);
+    }
+
+    .sidebar-subtitle {
+      font-size: 0.75rem;
+      color: var(--equilibrio);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .nav-list {
+      list-style: none;
+      overflow-y: auto;
+      flex: 1;
+      padding: 12px 0;
+
+      /* Compatibilidade Firefox para Barra de Rolagem */
+      scrollbar-width: thin;
+      scrollbar-color: var(--azul-progresso) rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-item {
+      padding: 12px 24px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.2s;
+      border-left: 4px solid transparent;
+      color: var(--equilibrio);
+    }
+
+    .nav-item:hover {
+      background-color: rgba(255,255,255,0.05);
+      color: var(--paz);
+    }
+
+    .nav-item.active {
+      background-color: rgba(198, 92, 49, 0.15);
+      border-left-color: var(--laranja-expansao);
+      color: var(--paz);
+      font-weight: 600;
+    }
+
+    .nav-item .slide-num {
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      min-width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-family: var(--fonte-titulo);
+    }
+
+    .nav-item.active .slide-num {
+      background: var(--laranja-expansao);
+      color: var(--paz);
+    }
+
+    /* MAIN CONTENT CONTAINER */
+    #main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* TOP PROGRESS BAR */
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background-color: var(--equilibrio);
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--azul-progresso), var(--laranja-expansao));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* SLIDE CANVAS */
+    #slide-viewport {
+      flex: 1;
+      padding: 40px 60px;
+      overflow-y: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 960px;
+      background: var(--paz);
+      padding: 40px 48px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(2, 10, 29, 0.05);
+      border-top: 5px solid var(--azul-progresso);
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* TYPOGRAPHY RULES */
+    h1, h2, h3 {
+      font-family: var(--fonte-titulo);
+      color: var(--azul-confianca);
+      margin-bottom: 16px;
+    }
+
+    h1 { font-size: 2.2rem; line-height: 1.2; }
+    h2 { font-size: 1.5rem; color: var(--azul-progresso); border-bottom: 2px solid var(--equilibrio); padding-bottom: 8px; margin-bottom: 20px; }
+    h3 { font-size: 1.1rem; color: var(--horizonte); }
+
+    p {
+      line-height: 1.5;
+      margin-bottom: 14px;
+      font-size: 0.95rem;
+    }
+
+    /* CONTENT STRUCTURES & CARDS */
+    .badge {
+      display: inline-block;
+      background: var(--laranja-expansao);
+      color: var(--paz);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .alert-box {
+      background-color: #FFF3ED;
+      border-left: 4px solid var(--laranja-expansao);
+      padding: 14px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+
+    .alert-box.info {
+      background-color: #EEF2F9;
+      border-left-color: var(--azul-progresso);
+    }
+
+    .alert-box.danger {
+      background-color: #FDF2F2;
+      border-left-color: var(--vermelho-alerta);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .card {
+      background: var(--fundo-suave);
+      padding: 16px 20px;
+      border-radius: 10px;
+      border: 1px solid var(--equilibrio);
+    }
+
+    .card-title {
+      font-family: var(--fonte-titulo);
+      font-weight: 700;
+      color: var(--azul-progresso);
+      margin-bottom: 8px;
+    }
+
+    /* TABLES */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border: 1px solid var(--equilibrio);
+    }
+
+    th {
+      background-color: var(--azul-confianca);
+      color: var(--paz);
+      font-family: var(--fonte-titulo);
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background-color: var(--fundo-suave);
+    }
+
+    /* LIST STYLES */
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 16px;
+    }
+
+    li {
+      margin-bottom: 6px;
+      line-height: 1.4;
+      font-size: 0.9rem;
+    }
+
+    /* PROCESS FLOW STYLES */
+    .process-flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .process-step {
+      background: var(--fundo-suave);
+      padding: 10px;
+      border-radius: 8px;
+      border-top: 3px solid var(--azul-progresso);
+      font-size: 0.8rem;
+    }
+
+    .process-step .step-number {
+      font-family: var(--fonte-titulo);
+      font-weight: 700;
+      color: var(--laranja-expansao);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* FOOTER CONTROLS */
+    .footer-controls {
+      height: 72px;
+      background-color: var(--paz);
+      border-top: 1px solid var(--equilibrio);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+    }
+
+    .btn {
+      font-family: var(--fonte-titulo);
+      padding: 10px 24px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background-color: var(--laranja-expansao);
+      color: var(--paz);
+    }
+
+    .btn-primary:hover {
+      background-color: #b04e27;
+    }
+
+    .btn-secondary {
+      background-color: var(--equilibrio);
+      color: var(--azul-confianca);
+    }
+
+    .btn-secondary:hover {
+      background-color: #c4c4c4;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .slide-counter {
+      font-size: 0.85rem;
+      color: var(--horizonte);
+      font-weight: 500;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      #sidebar { width: 100%; height: auto; max-height: 180px; }
+      #slide-viewport { padding: 20px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .process-flow { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <a href="https://im.ge/i/QQXgWU1"><img src="https://i.im.ge/QQXgWU1/IDV_Logo_horizontal_branca-t300.webp" alt="IDV Logo Horizontal Branca" /></a>
+    </div>
+    <ul class="nav-list" id="navList">
+      <!-- Gerado via JavaScript -->
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTAINER -->
+  <main id="main-container">
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div id="slide-viewport">
+
+      <!-- SLIDE 1 -->
+      <section class="slide active">
+        <span class="badge">Capacitação Comercial</span>
+        <h1 style="color: var(--azul-confianca); margin-top: 10px;">Diretrizes e Compliance</h1>
+        <h3 style="color: var(--laranja-expansao); font-weight: 500; margin-bottom: 24px;">Atuação Ética, Transparente e Regulada</h3>
+        
+        <div class="card" style="border-left: 5px solid var(--azul-progresso); background: #F8FAFC;">
+          <p style="margin: 0; font-weight: 600; color: var(--azul-confianca);">
+            Princípio Central: "O parceiro pode vender o produto, mas não pode alterar aquilo que o produto é, aquilo que o contrato prevê ou aquilo que a administradora efetivamente pode garantir."
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 2 -->
+      <section class="slide">
+        <h2>2. Objetivo do Treinamento</h2>
+        <p>Estabelecer diretrizes para a atuação de representantes, parceiros comerciais, vendedores e terceiros envolvidos na oferta de cotas, garantindo uma comercialização:</p>
+        <div class="grid-2">
+          <div class="card">
+            <ul style="margin: 0; padding-left: 15px;">
+              <li>Transparente e ética;</li>
+              <li>Compatível com a regulamentação do Banco Central;</li>
+              <li>Aderente ao contrato e às condições disponíveis;</li>
+            </ul>
+          </div>
+          <div class="card">
+            <ul style="margin: 0; padding-left: 15px;">
+              <li>Livre de promessas de contemplação ou vantagens não garantidas;</li>
+              <li>Compatível com as regras de defesa do consumidor;</li>
+              <li>Adequada à identidade e marca da administradora.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 3 -->
+      <section class="slide">
+        <h2>3. O Representante</h2>
+        <p style="font-size: 0.88rem;">A regulamentação do Banco Central (Resolução BCB nº 234/2022, arts. 14 a 16) estabelece que o representante atua por conta e sob as diretrizes da administradora contratante.</p>
+        <div class="alert-box danger">
+          <strong>Regra Operacional Fundamental:</strong> O representante NÃO é uma entidade independente para fins de comunicação do produto.
+        </div>
+        <div class="card">
+          <div class="card-title">Deveres do Representante:</div>
+          <div class="grid-2" style="margin: 0;">
+            <ul style="margin: 0; padding-left: 15px; font-size: 0.8rem;">
+              <li>Seguir materiais e scripts aprovados;</li>
+              <li>Usar apenas informações oficiais;</li>
+              <li>Respeitar condições comerciais vigentes;</li>
+              <li>Esclarecer características do produto;</li>
+            </ul>
+            <ul style="margin: 0; padding-left: 15px; font-size: 0.8rem;">
+              <li>Encaminhar dúvidas operacionais;</li>
+              <li>Preservar registros das vendas;</li>
+              <li>Utilizar corretamente a marca autorizada.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 4 -->
+      <section class="slide">
+        <h2>4. Regras de Contemplação</h2>
+        <div class="alert-box" style="margin-top: 0;">
+          <strong>Regra de Ouro:</strong> O representante não pode transformar uma possibilidade em promessa. A contemplação por sorteio ou lance é uma possibilidade, não um evento garantido.
+        </div>
+        <div class="grid-2">
+          <div class="card" style="border-top: 4px solid var(--verde-sucesso);">
+            <div class="card-title" style="color: var(--verde-sucesso);">✔️ Pode dizer:</div>
+            <ul style="font-size: 0.78rem; margin: 0; padding-left: 15px;">
+              <li>“Contemplação ocorre conforme as regras do grupo.”</li>
+              <li>“Existem contemplações por sorteio e/ou lance.”</li>
+              <li>“O lance aumenta as possibilidades, mas não garante a contemplação.”</li>
+            </ul>
+          </div>
+          <div class="card" style="border-top: 4px solid var(--vermelho-alerta);">
+            <div class="card-title" style="color: var(--vermelho-alerta);">❌ Não pode dizer:</div>
+            <ul style="font-size: 0.78rem; margin: 0; padding-left: 15px;">
+              <li>“Sua contemplação é garantida.”</li>
+              <li>“Você será contemplado em 30, 60 ou 90 dias.”</li>
+              <li>“Com esse lance você certamente será contemplado.”</li>
+            </ul>
+          </div>
+        </div>
+        <div class="alert-box danger" style="margin-bottom: 0; font-size: 0.8rem;">
+          <strong>Expressões Proibidas:</strong> "contemplação garantida", "contemplação certa", "contemplação imediata", "contemplação programada", "vaga reservada", "lance vencedor garantido".
+        </div>
+      </section>
+
+      <!-- SLIDE 5 -->
+      <section class="slide">
+        <h2>5. Parcelas e Custos</h2>
+        <p>A comunicação comercial deve refletir com exatidão os valores e critérios previstos contratualmente.</p>
+        <div class="grid-2">
+          <div class="card" style="border-top: 4px solid var(--verde-sucesso);">
+            <div class="card-title" style="color: var(--verde-sucesso);">✔️ Apresentar com transparência:</div>
+            <ul style="font-size: 0.8rem; margin: 0; padding-left: 15px;">
+              <li>Valor da parcela vigente e valor do crédito;</li>
+              <li>Prazo e Taxa de administração;</li>
+              <li>Fundo de reserva e seguro (quando aplicáveis);</li>
+              <li>Critérios de reajuste previstos em contrato.</li>
+            </ul>
+          </div>
+          <div class="card" style="border-top: 4px solid var(--vermelho-alerta);">
+            <div class="card-title" style="color: var(--vermelho-alerta);">❌ Proibido afirmar:</div>
+            <ul style="font-size: 0.8rem; margin: 0; padding-left: 15px;">
+              <li>"Parcela nunca aumenta";</li>
+              <li>"Esse é o único custo / Não existe outra cobrança";</li>
+              <li>"Você vai pagar exatamente esse valor até o final" (quando houver reajuste).</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 6 -->
+      <section class="slide">
+        <h2>6. Regulamentação BCB</h2>
+        <div class="card" style="margin-bottom: 12px;">
+          <div class="card-title">Lei nº 11.795/2008 (Lei dos Consórcios)</div>
+          <p style="font-size: 0.82rem; margin: 0;">Define o consórcio como união de pessoas em grupo para autofinanciamento de bens/serviços. A administradora é a gestora e mandatária do grupo. <strong>O vendedor não cria regras, apenas as explica.</strong></p>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Resolução BCB nº 285/2023</div>
+            <p style="font-size: 0.78rem; margin: 0;">Exige avaliação da viabilidade econômico-financeira. <strong>Aquisição de múltiplas cotas:</strong> limite de 10% das cotas ativas do grupo por consorciado (cumulativo com cônjuge/companheiro).</p>
+          </div>
+          <div class="card">
+            <div class="card-title">Resolução BCB nº 155/2021</div>
+            <p style="font-size: 0.78rem; margin: 0;">Foco em ética, transparência e consideração da vulnerabilidade do cliente. A venda deve gerar uma decisão consciente e informada.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 7 -->
+      <section class="slide">
+        <h2>7. Publicidade Enganosa</h2>
+        <p style="font-size: 0.88rem;">Aplica-se o Código de Defesa do Consumidor (Lei nº 8.078/1990). Comunicação que induz ao erro traz grave risco jurídico e de reputação.</p>
+        <div class="card" style="border-left: 4px solid var(--vermelho-alerta);">
+          <div class="card-title" style="color: var(--vermelho-alerta);">Exemplos de Mensagens de Alto Risco:</div>
+          <ul style="font-size: 0.8rem; margin: 0; padding-left: 15px;">
+            <li><strong>“Com apenas R$ X você compra seu imóvel”</strong> (Omite a dinâmica do consórcio).</li>
+            <li><strong>“Sem juros e sem custo”</strong> (Omite taxa de administração, seguro e fundo de reserva).</li>
+            <li><strong>“Crédito liberado na hora”</strong> (Transmite falsa ideia de ausência de contemplação e análise).</li>
+          </ul>
+        </div>
+        <div class="alert-box info" style="margin-bottom: 0;">
+          <strong>Compliance:</strong> O que o vendedor comunica ao consumidor deve ser integralmente controlável e auditável pela administradora.
+        </div>
+      </section>
+
+      <!-- SLIDE 8 -->
+      <section class="slide">
+        <h2>8. Procedimento Correto de Venda</h2>
+        <div class="process-flow">
+          <div class="process-step"><span class="step-number">1. Identificação</span> Dados do cliente</div>
+          <div class="process-step"><span class="step-number">2. Necessidade</span> Prazo e expectativa</div>
+          <div class="process-step"><span class="step-number">3. Apresentação</span> Valores, taxas e prazos</div>
+          <div class="process-step"><span class="step-number">4. Expectativas</span> Esclarecer urgência</div>
+          <div class="process-step"><span class="step-number">5. Regras</span> Sorteio, lance e contrato</div>
+          <div class="process-step"><span class="step-number">6. Formalização</span> Acesso a documentos</div>
+          <div class="process-step"><span class="step-number">7. Registro</span> Evidência da oferta</div>
+          <div class="process-step"><span class="step-number">8. Pós-Venda</span> Canais oficiais</div>
+        </div>
+        <div class="alert-box" style="margin-top: 10px; font-size: 0.85rem;">
+          <strong>Pergunta Chave na Etapa 4:</strong> "Você precisa necessariamente do bem em uma data específica?" Se sim, o consórcio NÃO pode ser ofertado como compra imediata.
+        </div>
+      </section>
+
+      <!-- SLIDE 9 -->
+      <section class="slide">
+        <h2>9. Checklist Obrigatório Pré Venda</h2>
+        <p style="font-size: 0.85rem;">O parceiro deve responder <strong>SIM</strong> a todas as perguntas antes da assinatura:</p>
+        <div class="card" style="font-size: 0.78rem;">
+          <div class="grid-2" style="margin: 0;">
+            <ul style="list-style: none; margin: 0; padding: 0;">
+              <li>☐ Cliente sabe que se trata de consórcio?</li>
+              <li>☐ Cliente sabe que NÃO há garantia de contemplação?</li>
+              <li>☐ Cliente conhece o valor do crédito e prazo?</li>
+              <li>☐ Conhece a parcela e taxas aplicáveis?</li>
+              <li>☐ Explicadas as regras de sorteio e lance?</li>
+              <li>☐ Evitou qualquer promessa de contemplação?</li>
+            </ul>
+            <ul style="list-style: none; margin: 0; padding: 0;">
+              <li>☐ Utilizou somente material oficial aprovado?</li>
+              <li>☐ Condição apresentada é a vigente?</li>
+              <li>☐ Cliente recebeu informações contratuais?</li>
+              <li>☐ Conhece os canais oficiais da administradora?</li>
+            </ul>
+          </div>
+        </div>
+        <div class="alert-box danger" style="margin-bottom: 0; text-align: center; font-size: 0.8rem;">
+          Se qualquer resposta for <strong>NÃO</strong>, a venda deve ser interrompida e revisada!
+        </div>
+      </section>
+
+      <!-- SLIDE 10 -->
+      <section class="slide">
+        <h2>10. Uso da Marca</h2>
+        <p style="font-size: 0.85rem;">O uso da marca é um tema estrito de <strong>Compliance</strong> (Resolução Conjunta nº 17/2025). É obrigatório deixar clara a condição de parceiro/representante.</p>
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid var(--vermelho-alerta);">
+            <div class="card-title" style="color: var(--vermelho-alerta);">❌ O Parceiro NÃO pode:</div>
+            <ul style="font-size: 0.78rem; margin: 0; padding-left: 15px;">
+              <li>Apresentar-se como se fosse a própria administradora;</li>
+              <li>Criar nome/marca que gere confusão comercial;</li>
+              <li>Criar campanhas ou materiais sem aprovação prévia.</li>
+            </ul>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--verde-sucesso);">
+            <div class="card-title" style="color: var(--verde-sucesso);">✔️ Boa Prática de Assinatura:</div>
+            <p style="font-size: 0.8rem; font-style: italic; margin-top: 10px;">
+              "[NOME DO PARCEIRO] — parceiro/representante autorizado da Ferraz Consórcios, conforme relação contratual vigente."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 11 -->
+      <section class="slide">
+        <h2>11. Redes Sociais & Mídia</h2>
+        <p style="font-size: 0.88rem;">As regras aplicadas ao atendimento presencial valem integralmente para Instagram, WhatsApp, TikTok, anúncios e sites. Informalidade não elimina responsabilidade!</p>
+        <div class="grid-2">
+          <div class="card" style="border-top: 4px solid var(--vermelho-alerta);">
+            <div class="card-title" style="color: var(--vermelho-alerta);">❌ Alto Risco (Proibido):</div>
+            <ul style="font-size: 0.78rem; margin: 0; padding-left: 15px;">
+              <li>“Quer ser contemplado ainda este mês?”</li>
+              <li>“Contemplação garantida / Sem burocracia.”</li>
+              <li>“Lance vencedor garantido.”</li>
+            </ul>
+          </div>
+          <div class="card" style="border-top: 4px solid var(--verde-sucesso);">
+            <div class="card-title" style="color: var(--verde-sucesso);">✔️ Comunicação Segura:</div>
+            <ul style="font-size: 0.78rem; margin: 0; padding-left: 15px;">
+              <li>“Conheça as condições do consórcio.”</li>
+              <li>“Consulte as regras de contemplação do grupo.”</li>
+              <li>“Contemplações conforme regramento oficial.”</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 12 -->
+      <section class="slide">
+        <h2>12. Perguntas Críticas</h2>
+        <div class="card" style="margin-bottom: 12px; border-left: 4px solid var(--azul-progresso);">
+          <div class="card-title">Cliente: “Quando vou ser contemplado?”</div>
+          <p style="font-size: 0.82rem; margin: 0; font-style: italic; color: var(--azul-confianca);">
+            <strong>Resposta Segura:</strong> “A contemplação ocorre conforme as regras do grupo, por sorteio e/ou lance, conforme previsto em contrato. Não podemos garantir uma data específica de contemplação.”
+          </p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--laranja-expansao);">
+          <div class="card-title">Vendedor: “Eu sei o valor do lance vencedor!”</div>
+          <p style="font-size: 0.82rem; margin: 0; font-style: italic; color: var(--azul-confianca);">
+            <strong>Orientação:</strong> Apresente apenas históricos oficiais disponibilizados e ressalte: “Esse dado é histórico e não representa garantia de que o mesmo percentual será vencedor na próxima assembleia.”
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 13 -->
+      <section class="slide">
+        <h2>13. Matriz PODE x NÃO PODE</h2>
+        <table style="font-size: 0.75rem;">
+          <thead>
+            <tr>
+              <th>Tema</th>
+              <th>Pode ✔️</th>
+              <th>Não Pode ❌</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Contemplação</strong></td>
+              <td>Explicar regras contratuais</td>
+              <td>Garantir data ou contemplação</td>
+            </tr>
+            <tr>
+              <td><strong>Lance</strong></td>
+              <td>Explicar funcionamento e histórico</td>
+              <td>Garantir lance vencedor</td>
+            </tr>
+            <tr>
+              <td><strong>Parcela</strong></td>
+              <td>Informar condição e reajuste vigente</td>
+              <td>Prometer parcela fixa sem base contratual</td>
+            </tr>
+            <tr>
+              <td><strong>Taxas</strong></td>
+              <td>Informar todos os valores previstos</td>
+              <td>Dizer “não existe custo” ou "sem juros/taxas"</td>
+            </tr>
+            <tr>
+              <td><strong>Marca / Mídias</strong></td>
+              <td>Usar materiais e artes aprovadas</td>
+              <td>Criar promessas ou se passar pela Administradora</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SLIDE 14 -->
+      <section class="slide">
+        <h2>14. Governança, Monitoramento e Regra Final</h2>
+        <div class="alert-box info" style="margin-top: 0;">
+          <strong>Venda Boa é Venda Sustentável:</strong> Promessas indevidas geram cancelamentos, prejuízo ao cliente, punições regulatórias e danos à reputação.
+        </div>
+        <div class="card" style="background: var(--azul-confianca); color: var(--paz); padding: 20px; text-align: center;">
+          <div class="card-title" style="color: var(--laranja-expansao); font-size: 1.1rem;">Teste de Ouro antes de falar com o cliente:</div>
+          <p style="font-size: 1.2rem; font-weight: 700; margin: 10px 0;">“EU CONSIGO PROVAR ISSO?”</p>
+          <p style="font-size: 0.82rem; color: var(--equilibrio); margin: 0;">
+            Se SIM (via contrato/tabela oficial) ➔ Apresente corretamente.<br>
+            Se NÃO ou se for condição futura ➔ Apresente apenas como possibilidade.<br>
+            Na dúvida ➔ Interrompa a venda e consulte o Compliance comercial!
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 15 -->
+      <section class="slide">
+        <span class="badge">Avaliação 04</span>
+        <h1 style="color: var(--azul-confianca); margin-top: 10px;">Diretrizes e Compliance</h1>
+        <h3 style="color: var(--laranja-expansao); font-weight: 500; margin-bottom: 24px;">Módulo 04</h3>
+        
+        <div class="card" style="border-left: 5px solid var(--azul-progresso); background: #F8FAFC;">
+          <p style="margin: 0; font-weight: 600; color: var(--azul-confianca);">
+            Clique <a href="https://forms.gle/Mpkktz6KQt7pNiFfA" target="_blank" style="color: var(--laranja-expansao);">aqui</a> para realizar a atividade.
+          </p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- FOOTER CONTROLS -->
+    <footer class="footer-controls">
+      <button class="btn btn-secondary" id="prevBtn" onclick="changeSlide(-1)">Anterior</button>
+      <div class="slide-counter" id="slideCounter">Slide 1 de 15</div>
+      <button class="btn btn-primary" id="nextBtn" onclick="changeSlide(1)">Próximo</button>
+    </footer>
+  </main>
+
+  <!-- JAVASCRIPT FOR INTERACTIVITY -->
+  <script>
+    const slideTitles = [
+      "Diretrizes & Compliance",
+      "Objetivo do Treinamento",
+      "O Representante",
+      "Regras de Contemplação",
+      "Parcelas e Custos",
+      "Regulamentação BCB",
+      "Publicidade Enganosa",
+      "Procedimento Correto de Venda",
+      "Checklist Obrigatório Pré Venda",
+      "Uso da Marca",
+      "Redes Sociais & Mídias",
+      "Perguntas Críticas",
+      "Matriz Pode x Não Pode",
+      "Governança, Monitoramento e Regra Final",
+      "Avaliação 04"
+    ];
+
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const navList = document.getElementById('navList');
+    const progressBar = document.getElementById('progressBar');
+    const slideCounter = document.getElementById('slideCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // Build sidebar menu items dynamically
+    slideTitles.forEach((title, index) => {
+      const li = document.createElement('li');
+      li.className = `nav-item ${index === 0 ? 'active' : ''}`;
+      li.onclick = () => goToSlide(index);
+      li.innerHTML = `
+        <span class="slide-num">${index + 1}</span>
+        <span>${title}</span>
+      `;
+      navList.appendChild(li);
+    });
+
+    const navItems = document.querySelectorAll('.nav-item');
+
+    function updateView() {
+      // Toggle slides
+      slides.forEach((slide, idx) => {
+        slide.classList.toggle('active', idx === currentSlide);
+      });
+
+      // Update active menu item
+      navItems.forEach((item, idx) => {
+        item.classList.toggle('active', idx === currentSlide);
+      });
+
+      // Scroll sidebar if needed
+      if (navItems[currentSlide]) {
+        navItems[currentSlide].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+
+      // Progress bar & Counter
+      const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+      slideCounter.textContent = `Slide ${currentSlide + 1} de ${slides.length}`;
+
+      // Enable/Disable Nav Buttons
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === slides.length - 1;
+    }
+
+    function changeSlide(direction) {
+      const newIndex = currentSlide + direction;
+      if (newIndex >= 0 && newIndex < slides.length) {
+        currentSlide = newIndex;
+        updateView();
+      }
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      updateView();
+    }
+
+    // Keyboard navigation listener (Left/Right Arrows & Space)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.code === 'Space') {
+        changeSlide(1);
+      } else if (e.key === 'ArrowLeft') {
+        changeSlide(-1);
+      }
+    });
+
+    // Initial render
+    updateView();
+  </script>
+</body>
+</html>

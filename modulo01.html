@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treinamento Comercial — Consórcio de Bens Móveis | Ferraz Consórcios</title>
+  
+  <!-- Tipografia Oficial da Marca -->
+  <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1Z8rx8IRvvCghJJpPZZtX_62PendejCt1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* VARIABLES & BRAND SYSTEM (Manual de Marca Ferraz Consórcios) */
+    :root {
+      --azul-confianca: #001A4B;
+      --azul-progresso: #314B87;
+      --laranja-expansao: #C65C31;
+      --horizonte: #344469;
+      --tradicao: #3D6DA7;
+      --equilibrio: #D8D8D8;
+      --paz: #FFFFFF;
+      --fundo-suave: #F4F6F9;
+      --vermelho-alerta: #D9534F;
+      --verde-sucesso: #2E7D32;
+      
+      --fonte-titulo: 'Poppins', sans-serif;
+      --fonte-corpo: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--fonte-corpo);
+      background-color: var(--fundo-suave);
+      color: var(--azul-confianca);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* SIDEBAR NAVIGATION */
+    #sidebar {
+      width: 320px;
+      background-color: var(--azul-confianca);
+      color: var(--paz);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+      z-index: 100;
+      box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+      padding: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .brand-logo {
+      font-family: var(--fonte-titulo);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--paz);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo span {
+      color: var(--laranja-expansao);
+    }
+
+    .sidebar-subtitle {
+      font-size: 0.75rem;
+      color: var(--equilibrio);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .nav-list {
+      list-style: none;
+      overflow-y: auto;
+      flex: 1;
+      padding: 12px 0;
+
+      /* Compatibilidade Firefox para Barra de Rolagem */
+      scrollbar-width: thin;
+      scrollbar-color: var(--azul-progresso) rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-item {
+      padding: 12px 24px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.2s;
+      border-left: 4px solid transparent;
+      color: var(--equilibrio);
+    }
+
+    .nav-item:hover {
+      background-color: rgba(255,255,255,0.05);
+      color: var(--paz);
+    }
+
+    .nav-item.active {
+      background-color: rgba(198, 92, 49, 0.15);
+      border-left-color: var(--laranja-expansao);
+      color: var(--paz);
+      font-weight: 600;
+    }
+
+    .nav-item .slide-num {
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      min-width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-family: var(--fonte-titulo);
+    }
+
+    .nav-item.active .slide-num {
+      background: var(--laranja-expansao);
+      color: var(--paz);
+    }
+
+    /* MAIN CONTENT CONTAINER */
+    #main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* TOP PROGRESS BAR */
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background-color: var(--equilibrio);
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--azul-progresso), var(--laranja-expansao));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* SLIDE CANVAS */
+    #slide-viewport {
+      flex: 1;
+      padding: 40px 60px;
+      overflow-y: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 960px;
+      background: var(--paz);
+      padding: 40px 48px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(2, 10, 29, 0.05);
+      border-top: 5px solid var(--azul-progresso);
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* TYPOGRAPHY RULES */
+    h1, h2, h3 {
+      font-family: var(--fonte-titulo);
+      color: var(--azul-confianca);
+      margin-bottom: 16px;
+    }
+
+    h1 { font-size: 2.2rem; line-height: 1.2; }
+    h2 { font-size: 1.5rem; color: var(--azul-progresso); border-bottom: 2px solid var(--equilibrio); padding-bottom: 8px; margin-bottom: 20px; }
+    h3 { font-size: 1.1rem; color: var(--horizonte); }
+
+    p {
+      line-height: 1.5;
+      margin-bottom: 14px;
+      font-size: 0.95rem;
+    }
+
+    /* CONTENT STRUCTURES & CARDS */
+    .badge {
+      display: inline-block;
+      background: var(--laranja-expansao);
+      color: var(--paz);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .alert-box {
+      background-color: #FFF3ED;
+      border-left: 4px solid var(--laranja-expansao);
+      padding: 14px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+
+    .alert-box.info {
+      background-color: #EEF2F9;
+      border-left-color: var(--azul-progresso);
+    }
+
+    .alert-box.danger {
+      background-color: #FDF2F2;
+      border-left-color: var(--vermelho-alerta);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .card {
+      background: var(--fundo-suave);
+      padding: 16px 20px;
+      border-radius: 10px;
+      border: 1px solid var(--equilibrio);
+    }
+
+    .card-title {
+      font-family: var(--fonte-titulo);
+      font-weight: 700;
+      color: var(--azul-progresso);
+      margin-bottom: 8px;
+    }
+
+    /* TABLES */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border: 1px solid var(--equilibrio);
+    }
+
+    th {
+      background-color: var(--azul-confianca);
+      color: var(--paz);
+      font-family: var(--fonte-titulo);
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background-color: var(--fundo-suave);
+    }
+
+    /* LIST STYLES */
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 16px;
+    }
+
+    li {
+      margin-bottom: 6px;
+      line-height: 1.4;
+      font-size: 0.9rem;
+    }
+
+    /* PROCESS FLOW STYLES */
+    .process-flow {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .process-step {
+      background: var(--fundo-suave);
+      padding: 12px;
+      border-radius: 8px;
+      border-top: 3px solid var(--azul-progresso);
+      font-size: 0.8rem;
+    }
+
+    .process-step .step-number {
+      font-family: var(--fonte-titulo);
+      font-weight: 700;
+      color: var(--laranja-expansao);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* FOOTER CONTROLS */
+    .footer-controls {
+      height: 72px;
+      background-color: var(--paz);
+      border-top: 1px solid var(--equilibrio);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+    }
+
+    .btn {
+      font-family: var(--fonte-titulo);
+      padding: 10px 24px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background-color: var(--laranja-expansao);
+      color: var(--paz);
+    }
+
+    .btn-primary:hover {
+      background-color: #b04e27;
+    }
+
+    .btn-secondary {
+      background-color: var(--equilibrio);
+      color: var(--azul-confianca);
+    }
+
+    .btn-secondary:hover {
+      background-color: #c4c4c4;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .slide-counter {
+      font-size: 0.85rem;
+      color: var(--horizonte);
+      font-weight: 500;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      #sidebar { width: 100%; height: auto; max-height: 180px; }
+      #slide-viewport { padding: 20px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .process-flow { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+    <a href="https://im.ge/i/QQXgWU1"><img src="https://i.im.ge/QQXgWU1/IDV_Logo_horizontal_branca-t300.webp" alt="IDV Logo Horizontal Branca" /></a>
+    </div>
+    <ul class="nav-list" id="navList">
+      <!-- Gerado via JavaScript -->
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTAINER -->
+  <main id="main-container">
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div id="slide-viewport">
+
+      <!-- SLIDE 1 -->
+      <section class="slide active">
+        <span class="badge">Capacitação Comercial</span>
+        <h1 style="color: var(--azul-confianca); margin-top: 10px;">Consórcio de Bens Móveis</h1>
+        <h3 style="color: var(--laranja-expansao); font-weight: 500; margin-bottom: 24px;">Guia de Formação para Representantes</h3>
+        
+        <div class="card" style="border-left: 5px solid var(--azul-progresso); background: #F8FAFC;">
+          <p style="margin: 0; font-weight: 600; color: var(--azul-confianca);">
+            Regra de ouro: O representante não vende apenas uma cota. Ele vende uma estratégia de planejamento para aquisição de um bem.
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 2 -->
+      <section class="slide">
+        <h2>2. Objetivo do Treinamento</h2>
+        <p>Preparar o representante para vender consórcio com segurança, clareza e estratégia, transformando o conhecimento técnico em argumentos comerciais capazes de gerar confiança e aumentar a conversão.</p>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Competências do Representante:</div>
+            <ul style="margin: 0; padding-left: 15px; font-size: 0.8rem;">
+              <li>Explicar o funcionamento de forma simples;</li>
+              <li>Identificar perfil e objetivo do cliente;</li>
+              <li>Apresentar o produto sob medida;</li>
+              <li>Explicar parcelas, assembleias, contemplação e lances;</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Foco Operacional & Conversão:</div>
+            <ul style="margin: 0; padding-left: 15px; font-size: 0.8rem;">
+              <li>Trabalhar objeções com segurança;</li>
+              <li>Evitar promessas fora das regras;</li>
+              <li>Conduzir o cliente até a adesão;</li>
+              <li>Fazer pós-venda para reduzir dúvidas e desistências.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 3 -->
+      <section class="slide">
+        <h2>3. O que é Consórcio de Bens Móveis?</h2>
+        <p>Modalidade de aquisição planejada em que pessoas com objetivos semelhantes participam de um grupo e contribuem mensalmente para formar os recursos utilizados nas contemplações.</p>
+        <div class="card" style="border-top: 4px solid var(--azul-progresso); margin-bottom: 12px;">
+          <div class="card-title">Abordagem Comercial Simples:</div>
+          <p style="font-size: 0.85rem; font-style: italic; margin: 0;">
+            “Você entra em um grupo de pessoas que têm o objetivo de adquirir um bem dentro da categoria contratada. Todos contribuem mensalmente e, nas assembleias, alguns participantes são contemplados por sorteio ou por lance. Quando contemplado, o cliente recebe o crédito para realizar a aquisição, observadas as regras da administradora.”
+          </p>
+        </div>
+        <div class="alert-box info" style="margin-bottom: 0; font-size: 0.82rem;">
+          <strong>Ponto Comercial Importante:</strong> Evite aulas excessivamente técnicas. O cliente precisa entender: Quanto vou pagar? O que posso comprar? Como posso ser contemplado? Quais as regras?
+        </div>
+      </section>
+
+      <!-- SLIDE 4 -->
+      <section class="slide">
+        <h2>4. Diagnóstico do Cliente</h2>
+        <p style="font-size: 0.88rem;">Antes de apresentar números, descubra o porquê da busca pelo consórcio. Perguntas essenciais:</p>
+        <div class="grid-2">
+          <div class="card">
+            <ul style="margin: 0; padding-left: 15px; font-size: 0.78rem;">
+              <li>Qual bem você pretende adquirir?</li>
+              <li>Qual valor de crédito está buscando?</li>
+              <li>Pretende comprar à vista quando for contemplado?</li>
+              <li>Tem disponibilidade para ofertar lance?</li>
+            </ul>
+          </div>
+          <div class="card">
+            <ul style="margin: 0; padding-left: 15px; font-size: 0.78rem;">
+              <li>Existe previsão de quando gostaria de adquirir o bem?</li>
+              <li>Qual o valor de parcela que cabe no seu bolso, sem comprometer suas outras contas?</li>
+              <li>Já conhece o funcionamento do consórcio?</li>
+              <li>Já possui consórcio ou seria sua primeira cota?</li>
+            </ul>
+          </div>
+        </div>
+        <div class="alert-box" style="margin-bottom: 0; font-size: 0.8rem;">
+          <strong>Por que aumenta a conversão?</strong> Porque você deixa de oferecer apenas uma "parcela" e passa a entregar uma solução adequada ao objetivo do cliente.
+        </div>
+      </section>
+
+      <!-- SLIDE 5 -->
+      <section class="slide">
+        <h2>5. Adesão e Pagamento das Parcelas</h2>
+        <div class="card" style="margin-bottom: 12px;">
+          <div class="card-title"> Adesão ao Grupo</div>
+          <p style="font-size: 0.82rem; margin: 0;">Efetivada mediante a inclusão da documentação do consorciado conforme checklist, assinatura do contrato de adesão via Docusing e pagamento da primeira parcela contratual.<br>
+<p></p>
+          <em>Abordagem:</em> “A sua participação no grupo é efetivada mediante a assinatura da proposta de adesão que você receberá por whatsapp ou e-mail e após realizar o pagamento da primeira parcela. A partir daí, você concorre às contemplações em assembleia.”</p>
+        </div>
+        <div class="card">
+          <div class="card-title"> Pagamento das Parcelas</div>
+          <p style="font-size: 0.82rem;">Parcelas mensais com vencimento todo <strong>dia 10</strong> (ou dia útil subsequente).</p>
+          <ul style="font-size: 0.78rem; margin: 0; padding-left: 15px;">
+            <li>Reforçar a importância de manter pagamentos em dia;</li>
+            <li>Possibilidade de incidência de encargos em caso de atraso;</li>
+            <li>Necessidade de acompanhar boletos e comunicados oficiais.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SLIDE 6 -->
+      <section class="slide">
+        <h2>6. Composição da Parcela &  Boletos</h2>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Componentes da Parcela:</div>
+            <ul style="font-size: 0.78rem; margin: 0; padding-left: 15px;">
+              <li><strong>Taxa de Administração:</strong> Remuneração pela gestão do grupo.</li>
+              <li><strong>Fundo de Reserva:</strong> Quando previsto, destinado à proteção do grupo.</li>
+              <li><strong>Seguro Prestamista:</strong> Quando contratado no plano.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title"> Acesso a Boletos & Suporte:</div>
+            <p style="font-size: 0.78rem; margin-bottom: 6px;">Os boletos mensais podem ser acessados diretamente pela <strong>área logada do cliente. </strong> com grupo/cota ou CPF + senha recebida por e-mail.</p>
+            <p style="font-size: 0.78rem; margin: 0;"><strong>Suporte:</strong> (61) 3346-8073 / (61) 3142-6800</p>
+          </div>
+        </div>
+        <div class="alert-box info" style="margin-bottom: 0; font-size: 0.8rem;">
+          <strong>Orientação:</strong> Certifique-se de que o cliente sabe exatamente como e onde emitir seus boletos antes de finalizar a venda.
+        </div>
+      </section>
+
+      <!-- SLIDE 7 -->
+      <section class="slide">
+        <h2>7. Atraso, Cancelamento e Restituição</h2>
+        <div class="card" style="margin-bottom: 10px;">
+          <div class="card-title" style="color: var(--vermelho-alerta);"> Atraso</div>
+          <p style="font-size: 0.78rem; margin: 0;">
+            Atraso gera multa e juros. O cancelamento pode ocorrer a partir da <strong>3ª parcela em atraso</strong>, conforme contrato (com busca prévia de regularização pela Administradora). Nunca minimize o atraso!
+          </p>
+        </div>
+             <div class="card" style="margin-bottom: 10px;">
+          <div class="card-title" style="color: var(--vermelho-alerta);"> Cancelamento</div>
+          <p style="font-size: 0.78rem; margin: 0;">
+            Em caso de cancelamento por atraso ou por solicitação do cliente, o valor a ser devolvido <strong>seguirá as regras contratuais.</strong>
+          </p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--vermelho-alerta);">
+          <div class="card-title">Regras de Restituição em Cancelamento:</div>
+          <ul style="font-size: 0.78rem; margin: 0; padding-left: 15px;">
+            <li>Devolução NÃO é imediata.</li>
+            <li>Valor pago (deduzida a multa) é devolvido via <strong>sorteio de desistentes/excluídos</strong> nas assembleias mensais.</li>
+            <li>Podem ocorrer deduções previstas em contrato.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SLIDE 8 -->
+      <section class="slide">
+        <h2>8. Reativação e Transferência de Cota</h2>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Reativação de Cota</div>
+            <p style="font-size: 0.78rem; margin-bottom: 6px;">A reativação não é automática. Requisitos:</p>
+            <ul style="font-size: 0.78rem; margin: 0; padding-left: 15px;">
+              <li>Existência de vaga no grupo;</li>
+              <li>Análise prévia da Administradora;</li>
+              <li>Decisão favorável de readmissão.</li>
+            </ol>
+          </div>
+          <div class="card">
+            <div class="card-title">Transferência para Terceiros</div>
+            <p style="font-size: 0.78rem; margin-bottom: 6px;">Requisitos obrigatórios:</p>
+            <ul style="font-size: 0.78rem; margin: 0; padding-left: 15px;">
+              <li>Análise e anuência prévia da Administradora;</li>
+              <li>Cumprimento de condições cadastrais;</li>
+              <li>Pagamento de taxa de transferência (tabela vigente).</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 9 -->
+      <section class="slide">
+        <h2>9. Contemplação</h2>
+        <p style="font-size: 0.85rem;">As contemplações ocorrem por <strong>Sorteio</strong> ou <strong>Lance</strong> na assembleia mensal.</p>
+        <div class="grid-2">
+          <div class="card" style="border-top: 4px solid var(--azul-progresso);">
+            <div class="card-title">Lance Fixo</div>
+            <p style="font-size: 1.2rem; font-weight: 700; color: var(--laranja-expansao);">25%</p>
+            <p style="font-size: 0.78rem; margin: 0;">O participante concorre oferecendo o percentual fixo determinado nas regras da modalidade.</p>
+          </div>
+          <div class="card" style="border-top: 4px solid var(--laranja-expansao);">
+            <div class="card-title">Lance Livre</div>
+            <p style="font-size: 0.85rem; font-weight: 700; color: var(--azul-progresso);">Percentual conforme as regras do grupo.</p>
+            <p style="font-size: 0.78rem; margin: 0;">O cliente define o percentual. Vence o maior percentual ofertado na assembleia, conforme regras do grupo.</p>
+          </div>
+	   
+        </div>
+        <div class="alert-box danger" style="margin-bottom: 0; font-size: 0.78rem;">
+          <strong>Atenção:</strong> Nunca prometa contemplação com base no percentual do lance. Fale em possibilidade, estratégia e competitividade.
+        </div>
+      </section>
+
+      <!-- SLIDE 10 -->
+      <section class="slide">
+        <h2>10. Pagamento do Lance</h2>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Lance Embutido</div>
+            <p style="font-size: 0.78rem;">Utiliza parte do próprio crédito contratado. <strong>Limite: até 40% do crédito.</strong></p>
+            <p style="font-size: 0.75rem; color: var(--horizonte); margin: 0;"><em>Exemplo:</em> Crédito R$ 100 mil | Embutido R$ 30 mil ➔ Crédito líquido para aquisição: <strong>R$ 70 mil</strong>.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">Recursos Próprios</div>
+            <p style="font-size: 0.78rem;">Valor próprio disponibilizado pelo cliente para a oferta.</p>
+            <p style="font-size: 0.75rem; color: var(--horizonte); margin: 0;"><em>Exemplo:</em> Crédito R$ 100 mil + R$ 25 mil próprios (25% ofertado) ➔ Mantém o crédito integral.</p>
+          </div>
+        </div>
+        <div class="alert-box" style="margin-bottom: 0; font-size: 0.8rem;">
+          <strong>Dica de Ouro:</strong> É possível mesclar recursos próprios e embutido para melhorar a estratégia! O lance embutido impacta o valor líquido disponível para aquisição.
+        </div>
+      </section>
+
+      <!-- SLIDE 11 -->
+      <section class="slide">
+        <h2>11. Estratégia e Perfil</h2>
+        <div class="card" style="margin-bottom: 12px; background: #EEF2F9;">
+          <div class="card-title">Mudar a Perspectiva do Cliente:</div>
+          <p style="font-size: 0.82rem; margin: 0;">
+            De <em>"Quanto fica a parcela?"</em> para <strong>"Qual é a melhor estratégia para alcançar meu objetivo?"</strong> (Crédito + Parcela + Assembleias + Sorteio + Lance).
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-title">Perfil Ideal de Cliente:</div>
+          <ul style="font-size: 0.78rem; margin: 0; padding-left: 15px;">
+            <li>Planeja uma aquisição e não precisa do bem imediatamente;</li>
+            <li>Deseja organizar-se financeiramente e possui capacidade de pagamento;</li>
+            <li>Pode ter recursos para lance e busca flexibilidade dentro da categoria permitida.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SLIDE 12 -->
+      <section class="slide">
+        <h2>12. Roteiro de Venda</h2>
+        <div class="process-flow">
+          <div class="process-step"><span class="step-number">Etapa 1</span> <strong>Conexão:</strong> Entender o contexto e parcela confortável</div>
+          <div class="process-step"><span class="step-number">Etapa 2</span> <strong>Diagnóstico:</strong> Bem, valor, prazo e recursos para lance</div>
+          <div class="process-step"><span class="step-number">Etapa 3</span> <strong>Apresentação:</strong> Conectar o plano ao objetivo do cliente</div>
+          <div class="process-step"><span class="step-number">Etapa 4</span> <strong>Contemplação:</strong> Explicar sorteio e lances (25% e livre)</div>
+          <div class="process-step"><span class="step-number">Etapa 5</span> <strong>Estratégia:</strong> Analisar recursos próprios e embutido (até 40%)</div>
+          <div class="process-step"><span class="step-number">Etapa 6</span> <strong>Fechamento:</strong> Conduzir com segurança para a adesão</div>
+        </div>
+      </section>
+
+      <!-- SLIDE 13 -->
+      <section class="slide">
+        <h2>13. Objeções e Respostas Rápidas</h2>
+        <div class="grid-2" style="font-size: 0.75rem;">
+          <div class="card">
+            <strong>"Quando vou ser contemplado?"</strong>
+            <p style="margin-top: 4px;">Não é possível garantir data. Ocorre por sorteio ou lance nas assembleias. Criamos a melhor estratégia.</p>
+          </div>
+          <div class="card">
+            <strong>"Preciso ter dinheiro para dar lance?"</strong>
+            <p style="margin-top: 4px;">Não. Além de recursos próprios, existe a opção de lance embutido de até 40% do crédito.</p>
+          </div>
+          <div class="card">
+            <strong>"Se não for contemplado, perco o dinheiro?"</strong>
+            <p style="margin-top: 4px;">Não. Permanece participando do grupo normalmente com cota ativa conforme contrato.</p>
+          </div>
+          <div class="card">
+            <strong>"Posso escolher qualquer bem?"</strong>
+            <p style="margin-top: 4px;">Qualquer bem enquadrado dentro da categoria contratada e regras do grupo.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 14 -->
+      <section class="slide">
+        <h2>14. Erros &  Checklist</h2>
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid var(--vermelho-alerta);">
+            <div class="card-title" style="color: var(--vermelho-alerta);">❌ NUNCA COMETA:</div>
+            <ul style="font-size: 0.75rem; margin: 0; padding-left: 15px;">
+              <li>Prometer data de contemplação;</li>
+              <li>Garantir contemplação por determinado lance;</li>
+              <li>Omitir que o embutido reduz o crédito líquido;</li>
+              <li>Omitir regras contratuais de cancelamento;</li>
+              <li>Dar informações sem certeza (Na dúvida, confirme!).</li>
+            </ul>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--verde-sucesso);">
+            <div class="card-title" style="color: var(--verde-sucesso);">✔️ CHECKLIST ANTES DA ADESÃO:</div>
+            <ul style="font-size: 0.72rem; margin: 0; padding-left: 15px;">
+              <li>Crédito, categoria do bem e parcelas claros?</li>
+              <li>Regras de Sorteio, Lance Fixo (25%) e Livre explicadas?</li>
+              <li>Limite de Lance Embutido (40%) compreendido?</li>
+              <li>Regras de atraso, restituição e canais informados?</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 15 -->
+      <section class="slide">
+        <h2>15. Fechamento e Pós-Venda</h2>
+        <div class="card" style="margin-bottom: 10px;">
+          <div class="card-title"> Fechamento Comercial Construtivo</div>
+          <p style="font-size: 0.78rem; margin: 0;"><em>Exemplo:</em> “Você busca um crédito de R$ X, parcela confortável de R$ Y e lance de R$ Z. Essa estrutura atende perfeitamente. Vamos avançar com a sua adesão?”</p>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Pós-Venda de Performance</div>
+            <p style="font-size: 0.75rem; margin: 0;">Confirme se o cliente recebeu o e-mail de boas-vindas, acessou a área logada e sabe onde consultar os boletos e datas das assembleias.</p>
+          </div>
+          <div class="card">
+            <div class="card-title"> Mindset do Representante</div>
+            <p style="font-size: 0.75rem; margin: 0;">Pergunte antes de oferecer. Traduza o produto para a realidade do cliente. Conhecimento gera segurança; relevância gera conversão!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 16 -->
+      <section class="slide">
+        <h2>16. Resumo e Encerramento</h2>
+        <table style="font-size: 0.72rem; margin-bottom: 12px;">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Regra do Produto (Bens Móveis)</th>
+            </tr>
+          </thead>
+<div>
+          <tbody>
+            <tr><td><strong>Adesão / Vencimento</strong></td><td>1ª parcela / Todo dia 10 (ou dia útil subsequente)</td></tr>
+            <tr><td><strong>Composição Parcela</strong></td><td>Taxa Adm + Fundo Reserva + Seguro Prestamista (quando contratado)</td></tr>
+            <tr><td><strong>Lance Livre/ Fixo / Embutido</strong></td><td> Qualquer percentual ofertado pelo consorciado / 25% Fixo / Até 40% do crédito contratado</td></tr>
+            <tr><td><strong>Atraso / Cancelamento</strong></td><td>Multa e juros / A partir da 3ª parcela em atraso</td></tr>
+            <tr><td><strong>Restituição / Transferência</strong></td><td>Sorteio de excluídos nas assembleias / Sujeito à análise e taxa</td></tr>
+          </tbody>
+        </table>
+        <div class="card" style="background: var(--azul-confianca); color: var(--paz); text-align: center; padding: 16px;">
+          <p style="font-size: 1rem; font-weight: 700; color: var(--laranja-expansao); margin-bottom: 4px;">
+            Não venda apenas uma parcela. Descubra o que o cliente quer conquistar, mostre a estratégia e conduza a decisão.
+          </p>
+          <p style="font-size: 0.78rem; color: var(--equilibrio); margin: 0;">Venda com clareza. Venda com segurança. Venda com estratégia.</p>
+        </div>
+      </section>
+   
+
+ <!-- SLIDE 17 -->
+      <section class="slide">
+        <span class="badge">Avaliação 01</span>
+        <h1 style="color: var(--azul-confianca); margin-top: 10px;">Consórcio de Bens Móveis</h1>
+        <h3 style="color: var(--laranja-expansao); font-weight: 500; margin-bottom: 24px;">Modulo 01</h3>
+        
+        <div class="card" style="border-left: 5px solid var(--azul-progresso); background: #F8FAFC;">
+          <p style="margin: 0; font-weight: 600; color: var(--azul-confianca);">
+            Clique <a href= "https://forms.gle/dU44XeEUiSMeSLcF7"> aqui </a> para realizar a atividade.
+          </p>
+        </div>
+      </section>
+
+</div>
+
+    <!-- FOOTER CONTROLS -->
+    <footer class="footer-controls">
+      <button class="btn btn-secondary" id="prevBtn" onclick="changeSlide(-1)">Anterior</button>
+      <div class="slide-counter" id="slideCounter">Slide 1 de 16</div>
+      <button class="btn btn-primary" id="nextBtn" onclick="changeSlide(1)">Próximo</button>
+    </footer>
+  </main>
+
+  <!-- JAVASCRIPT FOR INTERACTIVITY -->
+  <script>
+    const slideTitles = [
+      "Visão Geral",
+      "Objetivo do Treinamento",
+      "O que é o Consórcio de Bens Móveis",
+      "Diagnóstico do Cliente",
+      "Adesão e Pagamento",
+      "Composição da Parcela e Boletos",
+      "Atraso, Cancelamento e Restituição",
+      "Reativação e Transferência da Cota",
+      "Contemplação",
+      "Pagamento do Lance",
+      "Estratégia e Perfil",
+      "Roteiro de Venda",
+      "Objeções e Respostas Rápidas",
+      "Erros & Checklist",
+      "Fechamento e Pós-Venda",
+      "Resumo e Encerramento",
+"Avaliação-01"
+    ];
+
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const navList = document.getElementById('navList');
+    const progressBar = document.getElementById('progressBar');
+    const slideCounter = document.getElementById('slideCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // Build sidebar menu items dynamically
+    slideTitles.forEach((title, index) => {
+      const li = document.createElement('li');
+      li.className = `nav-item ${index === 0 ? 'active' : ''}`;
+      li.onclick = () => goToSlide(index);
+      li.innerHTML = `
+        <span class="slide-num">${index + 1}</span>
+        <span>${title}</span>
+      `;
+      navList.appendChild(li);
+    });
+
+    const navItems = document.querySelectorAll('.nav-item');
+
+    function updateView() {
+      // Toggle slides
+      slides.forEach((slide, idx) => {
+        slide.classList.toggle('active', idx === currentSlide);
+      });
+
+      // Update active menu item
+      navItems.forEach((item, idx) => {
+        item.classList.toggle('active', idx === currentSlide);
+      });
+
+      // Scroll sidebar if needed
+      if (navItems[currentSlide]) {
+        navItems[currentSlide].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+
+      // Progress bar & Counter
+      const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+      slideCounter.textContent = `Slide ${currentSlide + 1} de ${slides.length}`;
+
+      // Enable/Disable Nav Buttons
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === slides.length - 1;
+    }
+
+    function changeSlide(direction) {
+      const newIndex = currentSlide + direction;
+      if (newIndex >= 0 && newIndex < slides.length) {
+        currentSlide = newIndex;
+        updateView();
+      }
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      updateView();
+    }
+
+    // Keyboard navigation listener (Left/Right Arrows & Space)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        changeSlide(1);
+      } else if (e.key === 'ArrowLeft') {
+        changeSlide(-1);
+      }
+    });
+
+    // Initial render
+    updateView();
+  </script>
+</body>
+</html>
